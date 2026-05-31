@@ -1,4 +1,5 @@
 import { clientes } from "../models/index.js";
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 
 class ClientesController {
     static listarClientes = async (req, res, next) => {
@@ -21,7 +22,7 @@ class ClientesController {
                 res.status(200).json(clienteResultado);
             }
             else{
-                res.status(404).json({ message: "Cliente não encontrado" });
+                next(new NaoEncontrado("Cliente não encontrado"));
             }
         }
         catch(erro){
@@ -48,7 +49,7 @@ class ClientesController {
                 res.status(200).json({ message: "Cliente atualizado com sucesso" });
             }
             else{
-                res.status(404).json({ message: "Cliente não encontrado" });
+                next(new NaoEncontrado("Cliente não encontrado"));
             }
         }
         catch(erro){
@@ -64,7 +65,7 @@ class ClientesController {
                 res.status(200).json({ message: "Cliente excluído com sucesso" });
             }
             else{
-                res.status(404).json({ message: "Cliente não encontrado" });
+                next(new NaoEncontrado("Cliente não encontrado"));
             }
         }
         catch(erro){

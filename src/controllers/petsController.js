@@ -1,4 +1,5 @@
 import { pets, clientes } from "../models/index.js";
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 
 class PetsController {
     static listarPets = async (req, res, next) => {
@@ -23,7 +24,7 @@ class PetsController {
                 res.status(200).json(petResultado);
             }
             else{
-                res.status(404).json({ message: "Pet não encontrado" });
+                next(new NaoEncontrado("Pet não encontrado"));
             }
         }
         catch(erro){
@@ -50,7 +51,7 @@ class PetsController {
                 res.status(200).json({ message: "Pet atualizado com sucesso" });
             }
             else{
-                res.status(404).json({ message: "Pet não encontrado" });
+                next(new NaoEncontrado("Pet não encontrado"));
             }
         }
         catch(erro){
@@ -66,7 +67,7 @@ class PetsController {
                 res.status(200).json({ message: "Pet excluído com sucesso" });
             }
             else{
-                res.status(404).json({ message: "Pet não encontrado" });
+                next(new NaoEncontrado("Pet não encontrado"));
             }
         }
         catch(erro){
