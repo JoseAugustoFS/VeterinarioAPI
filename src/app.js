@@ -1,5 +1,6 @@
 import express from "express";
 import db from "./config/dbConnect.js";
+import clientesRoutes from "./routes/clientiesRoutes.js";
 
 db.on("error", console.log.bind(console, "Erro de conexão"));
 db.once("open", () => {
@@ -8,6 +9,8 @@ db.once("open", () => {
 
 
 const app = express();
+app.use(express.json());
+app.use(clientesRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
