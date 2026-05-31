@@ -1,17 +1,17 @@
 import { pets } from "../models/index.js";
 
 class PetsController {
-    static listarPets = async (req, res) => {
+    static listarPets = async (req, res, next) => {
         try{
             const petsResultado = await pets.find().populate('cliente');
             res.status(200).json(petsResultado);
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 
-    static listarPetPorId = async (req, res) => {
+    static listarPetPorId = async (req, res, next) => {
         try{
             const id = req.params.id;
             const petResultado = await pets.findById(id).populate('cliente')
@@ -25,22 +25,22 @@ class PetsController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 
-    static cadastrarPet = async (req, res) => {
+    static cadastrarPet = async (req, res, next) => {
         try{
             const petResultado = new pets(req.body);
             await petResultado.save();
             res.status(201).json(petResultado);
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     };
 
-    static atualizarPet = async (req, res) => {
+    static atualizarPet = async (req, res, next) => {
         try{
             const id = req.params.id;
             const petResultado = await pets.findByIdAndUpdate(id, { $set: req.body });
@@ -52,11 +52,11 @@ class PetsController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 
-    static excluirPet = async (req, res) => {
+    static excluirPet = async (req, res, next) => {
         try{
             const id = req.params.id;
             const petResultado = await pets.findByIdAndDelete(id);
@@ -68,7 +68,7 @@ class PetsController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 }

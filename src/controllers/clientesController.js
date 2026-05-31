@@ -1,17 +1,18 @@
 import { clientes } from "../models/index.js";
 
 class ClientesController {
-    static listarClientes = async (req, res) => {
+    static listarClientes = async (req, res, next) => {
         try{
             const clientesResultado = await clientes.find();
+
             res.status(200).json(clientesResultado);
         }
         catch(erro){
-            res.status(500).json({ message: err.message });
+            next(erro);
         }
     }
 
-    static listarClientePorId = async (req, res) => {
+    static listarClientePorId = async (req, res, next) => {
         try{
             const id = req.params.id;
             const clienteResultado = await clientes.findById(id);
@@ -23,22 +24,22 @@ class ClientesController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 
-    static cadastrarCliente = async (req, res) => {
+    static cadastrarCliente = async (req, res, next) => {
         try{
             const clienteResultado = new clientes(req.body);
             await clienteResultado.save();
             res.status(201).json(clienteResultado);
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     };
 
-    static atualizarCliente = async (req, res) => {
+    static atualizarCliente = async (req, res, next) => {
         try{
             const id = req.params.id;
             const clienteResultado = await clientes.findByIdAndUpdate(id, { $set: req.body });
@@ -50,11 +51,11 @@ class ClientesController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 
-    static excluirCliente = async (req, res) => {
+    static excluirCliente = async (req, res, next) => {
         try{
             const id = req.params.id;
             const clienteResultado = await clientes.findByIdAndDelete(id);
@@ -66,7 +67,7 @@ class ClientesController {
             }
         }
         catch(erro){
-            res.status(500).json({ message: erro.message });
+            next(erro);
         }
     }
 }
