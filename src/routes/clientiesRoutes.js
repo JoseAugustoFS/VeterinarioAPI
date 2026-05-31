@@ -5,6 +5,9 @@ const router = express.Router();
 
 router
 .get("/clientes", ClientesController.listarClientes)
-.post("/clientes", ClientesController.cadastrarCliente);
+.get("/clientes/:id", ClientesController.listarClientePorId)
+.post("/clientes", ClientesController.cadastrarCliente)
+.put("/clientes/:id", ClientesController.atualizarCliente)
+.delete("/clientes/:id", ClientesController.excluirCliente);
 
 export default router;
