@@ -6,6 +6,7 @@ const router = express.Router();
 
 router
 .get("/pets", PetsController.listarPets, paginar)
+.get("/pets/busca", PetsController.listarPetsPorFiltro, paginar)
 .get("/pets/:id", PetsController.listarPetPorId)
 .post("/pets", PetsController.cadastrarPet)
 .put("/pets/:id", PetsController.atualizarPet)

@@ -6,6 +6,7 @@ const router = express.Router();
 
 router
 .get("/clientes", ClientesController.listarClientes, paginar)
+.get("/clientes/busca", ClientesController.listarClientesPorFiltro, paginar)
 .get("/clientes/:id", ClientesController.listarClientePorId)
 .post("/clientes", ClientesController.cadastrarCliente)
 .put("/clientes/:id", ClientesController.atualizarCliente)

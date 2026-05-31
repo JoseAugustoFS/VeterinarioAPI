@@ -71,6 +71,49 @@ class ClientesController {
             next(erro);
         }
     }
+
+    static listarClientesPorFiltro = async (req, res, next) => {
+        try{
+            const busca = await processaBusca(req.query);
+            
+            if(busca !== null){
+                const clientesResultado = clientes.find(busca);
+
+                req.resultado = clientesResultado;
+                next();
+            }
+            else{
+                res.status(200).send([]);
+            }
+        }
+        catch(erro){
+            next(erro);
+        }
+    }
+}
+
+async function processaBusca(parametros){
+    const {nome, email, telefone, endereco} = parametros;
+
+    let busca = {};
+
+    if(nome){
+        busca.nome = { $regex: nome, $options: "i" };
+    }
+
+    if(email){
+        busca.email = { $regex: email, $options: "i" };
+    }
+
+    if(telefone){
+        busca.telefone = { $regex: telefone, $options: "i" };
+    }
+
+    if(endereco){
+        busca.endereco = { $regex: endereco, $options: "i" };
+    }
+
+    return busca;
 }
 
 export default ClientesController;

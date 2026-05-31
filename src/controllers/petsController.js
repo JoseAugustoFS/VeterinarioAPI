@@ -1,4 +1,4 @@
-import { pets } from "../models/index.js";
+import { pets, clientes } from "../models/index.js";
 
 class PetsController {
     static listarPets = async (req, res, next) => {
@@ -73,6 +73,66 @@ class PetsController {
             next(erro);
         }
     }
+
+    static listarPetsPorFiltro = async (req, res, next) => {
+        try{
+            const busca = await processaBusca(req.query);
+            
+            if(busca !== null){
+                const petsResultado = pets.find(busca).populate('cliente');
+                
+                req.resultado = petsResultado;
+                next();
+            }
+            else{
+                res.status(200).send([]);
+            }
+        }
+        catch(erro){
+            next(erro);
+        }
+    }
+}
+
+async function processaBusca(parametros){
+    const busca = {};
+    const { nome, especie, minIdade, maxIdade, raca, dono } = parametros;
+
+    if(nome){
+        busca.nome = { $regex: nome, $options: "i" };
+    }
+
+    if(especie){
+        busca.especie = { $regex: especie, $options: "i" };
+    }
+
+    if(raca){
+        busca.raca = { $regex: raca, $options: "i" };
+    }
+
+    if(minIdade || maxIdade){
+        busca.idade = {};
+    }
+
+    if(minIdade){
+        busca.idade.$gte = minIdade;
+    }
+
+    if(maxIdade){
+        busca.idade.$lte = maxIdade;
+    }
+
+    if(dono){
+        const clienteResultado = await clientes.findOne({ nome: { $regex: dono, $options: "i" } });
+        if(clienteResultado !== null){
+            busca.cliente = clienteResultado._id;
+        }
+        else{
+            return null;
+        }
+    }
+
+    return busca;
 }
 
 export default PetsController;
