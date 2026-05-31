@@ -3,9 +3,10 @@ import { clientes } from "../models/index.js";
 class ClientesController {
     static listarClientes = async (req, res, next) => {
         try{
-            const clientesResultado = await clientes.find();
+            const clientesResultado = clientes.find();
 
-            res.status(200).json(clientesResultado);
+            req.resultado = clientesResultado;
+            next();
         }
         catch(erro){
             next(erro);

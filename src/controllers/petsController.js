@@ -3,8 +3,10 @@ import { pets } from "../models/index.js";
 class PetsController {
     static listarPets = async (req, res, next) => {
         try{
-            const petsResultado = await pets.find().populate('cliente');
-            res.status(200).json(petsResultado);
+            const petsResultado = pets.find().populate('cliente');
+            
+            req.resultado = petsResultado;
+            next();
         }
         catch(erro){
             next(erro);
